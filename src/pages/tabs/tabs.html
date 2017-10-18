@@ -1,14 +1,15 @@
-    <ng-container *ngIf="logInCheck">
-            <ion-tabs>
-                    <ion-tab [root]="tab1Root" tabTitle="Hem" tabIcon="home"></ion-tab>
-                    <ion-tab [root]="tab2Root" tabTitle="Tvätt" tabIcon="information-circle"></ion-tab>
-                    <ion-tab [root]="tab3Root" tabTitle="Kontakt" tabIcon="contacts"></ion-tab>
-                </ion-tabs>
-    </ng-container>
-    <ng-container *ngIf="!logInCheck">
-        <ion-tabs>
-                <ion-tab [root]="tab4Root" tabTitle="Login" tabIcon="home"></ion-tab>
-            </ion-tabs>
+<ng-container *ngIf="logInCheck">
+    <ion-tabs>
+        <ion-tab [root]="tab1Root" tabTitle="Hem" tabIcon="home"></ion-tab>
+        <ion-tab [root]="tab2Root" tabTitle="Tvätt" tabIcon="calendar"></ion-tab>
+        <ion-tab [root]="tab3Root" tabTitle="Inställningar" tabIcon="build"></ion-tab>
+        <ion-tab [root]="tab5Root" tabTitle="Logga ut" tabIcon="backspace"></ion-tab>
+    </ion-tabs>
+</ng-container>
+<ng-container *ngIf="!logInCheck">
+    <ion-tabs>
+        <ion-tab [root]="tab4Root" tabTitle="Login" tabIcon="ionic"></ion-tab>
+    </ion-tabs>
 </ng-container>
     
 

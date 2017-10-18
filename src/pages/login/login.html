@@ -1,19 +1,21 @@
 <ion-header>
   <ion-navbar>
-    <ion-title>Log in</ion-title>
+    <ion-title>Washing App</ion-title>
   </ion-navbar>
 </ion-header>
 
 
-<ion-content padding>
-    <form>
-        <div class="loginInput">
-          <p>Username</p>
-          <input type="text" />
-          <p>Password</p>
-          <input type="password" />
-          <p></p>
-          <input type="submit"/>
-      </div>
-      </form>
+<ion-content id="LogInForm">
+  <h1>Logga in</h1>
+  <p>Fyll i dina uppgifter nedan</p>
+  <ion-item>
+    <ion-label floating>Username</ion-label>
+    <ion-input type="text" [(ngModel)]="username"></ion-input>
+  </ion-item>
+        
+  <ion-item>
+    <ion-label floating>Password</ion-label>
+    <ion-input type="password" [(ngModel)]="password"></ion-input>
+  </ion-item>
+  <button ion-button round (click)="this.handleSubmit()" id="LogInButton">Logga in</button>
 </ion-content>

@@ -7,6 +7,14 @@
 </ion-header>
 
 <ion-content>
-  <p>Har du någon fråga Erika så ring mig</p>
-  <a href="tel:0720425918">Nicholas jävla mobiltelefon</a>
+  <div id="ChangeMail">
+    <h2 class="SettingsElements">Mail</h2>
+    <button ion-button round (click)="this.changeEmail()" class="SettingsElements" id="changeButton">Ändra</button>
+  </div>
+  <hr id="DividingLine"/>
+  <div id="ChangePassword">
+    <h2 class="SettingsElements">Lösenord</h2>
+    <button ion-button round (click)="this.changePassword()" class="SettingsElements" id="changeButton">Ändra</button>
+  </div>
+  <hr id="DividingLine"/>
 </ion-content>

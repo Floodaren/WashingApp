@@ -34,8 +34,73 @@ app.get('/GetUsers', function(req,res){
   });
 });
 
+app.post('/LogInUser', function(req, res) {
+  var user = {username: req.body.username, password: req.body.password};
+  
+  connection.query('SELECT Id,Email FROM Users WHERE Email = ' + "'" + user.username + "' AND Password = '" + user.password + "'", 
+  function(error, result){
+    if (result == 0)
+    {
+      res.send({userId: 0});
+    }
+    else
+    {
+      res.send({userId: result[0].Id, email: result[0].Email});
+    }
+  }); 
+});
+
+app.post('/ChangePassword', function(req, res) {
+  var user = {userId: req.body.userId, password: req.body.password};
+  
+  connection.query('UPDATE Users SET Password = ' + "'" + user.password + "' WHERE id = " + user.userId, 
+  function(error, result){
+    if (result == 0)
+    {
+      res.send({satus: false});    
+    }
+    else
+    {
+      res.send({status: true});
+    }
+  }); 
+});
+
+
+app.post('/ChangeEmail', function(req, res) {
+  var user = {userId: req.body.userId, email: req.body.email};
+  
+  connection.query('UPDATE Users SET Email = ' + "'" + user.email + "' WHERE id = " + user.userId, 
+  function(error, result){
+    if (result == 0)
+    {
+      res.send({satus: false});
+    }
+    else
+    {
+      res.send({status: true});
+    }
+  }); 
+});
+
+app.post('/GetWashTimesForSpecificUser', function(req, res) {
+  var user = {userId: req.body.userId,};
+  
+  connection.query('SELECT Starttime,Endtime,Description FROM WashTime WHERE UserId = ' + "'" + user.userId +  "'", 
+  function(error, result){
+    if (result == 0)
+    {
+      res.send({result: false});
+    }
+    else
+    {
+      res.send({result: result});
+    }
+  }); 
+});
 
 /*
+
 app.post('/logInUser', function(req, res) {
   var user = {username: req.body.username, password: req.body.password};
   

@@ -1,12 +1,14 @@
 page-login {
-    .loginInput
+    #LogInForm
     {
-        width: 100%;
-        display: inline-block;
         text-align: center;
     }
-    #logInHeader
+    #LogInButton
     {
-        text-align: center;
+        display: block;
+        margin: auto;
+        margin-top: 25px;
+        width: 50%;
+        height: 30px;
     }
 }

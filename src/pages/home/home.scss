@@ -1,4 +1,34 @@
 page-home {
+    #UpdateButton
+    {
+        display: block;
+        margin: auto;
+        margin-top: 50px;
+        
+    }
 
+    #washList
+    {
+        list-style-type: none;
+        padding: 0;
+        margin: 0;
+    }
+
+    .welcomeScreen
+    {
+        text-align: center;
+    }
+
+    #newTimeLine
+    {
+        display: block;
+        margin-right: 2%;
+        margin-left: 1%;
+    }
+
+    .washInfo
+    {
+        text-align: center;
+    }
 }
 

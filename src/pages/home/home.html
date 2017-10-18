@@ -1,9 +1,20 @@
 <ion-header>
   <ion-navbar>
-    <ion-title>Hem</ion-title>
+      <ion-title id="HomeTitle">Hem</ion-title>
   </ion-navbar>
 </ion-header>
 
-<ion-content padding>
-  <h1 id="logInHeader">Välkommen</h1>
+<ion-content>
+  <h1 class="welcomeScreen">Välkommen</h1>
+  <p class="welcomeScreen">Detta är dina bokade tvättider</p>
+  <hr>
+  <ng-container>
+      <ol id="washList" *ngFor="let item of posts">
+          <li class="washInfo">Starttid: {{item.Starttime | date: 'yyyy-MM-dd HH:mm'}}</li>
+          <li class="washInfo">Sluttid: {{item.Endtime | date: 'yyyy-MM-dd HH:mm'}}</li>
+          <li class="washInfo">Beskrivning: {{item.Description}}</li>
+          <hr id="newTimeLine">
+      </ol>
+  </ng-container>
+  <button ion-button round (click)="this.getPosts()" id="UpdateButton">Uppdatera</button>
 </ion-content>
