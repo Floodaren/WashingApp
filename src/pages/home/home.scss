@@ -24,11 +24,17 @@ page-home {
         display: block;
         margin-right: 2%;
         margin-left: 1%;
+        margin-bottom: 0px;
     }
 
     .washInfo
     {
         text-align: center;
+    }
+
+    #test 
+    {
+        margin-bottom: 0;   
     }
 }
 

@@ -1,8 +1,9 @@
 import { Component } from '@angular/core';
 import { NavController } from 'ionic-angular';
 import { Storage } from '@ionic/storage';
+import { App } from 'ionic-angular';
+import { TabsPage } from '../tabs/tabs';
 import axios from 'axios';
-import { DatePipe } from '@angular/common';
 
 @Component({
   selector: 'page-home',
@@ -11,7 +12,7 @@ import { DatePipe } from '@angular/common';
 export class HomePage {
   id:any;
   posts:any;
-  constructor(public navCtrl: NavController, public storage: Storage) {
+  constructor(public navCtrl: NavController, public storage: Storage, private app:App ) {
     this.ShowWashTimes();
   }
 
@@ -26,6 +27,37 @@ export class HomePage {
   getPosts()
   {
     this.handleGetWashTimes();
+  }
+
+  deleteWashTime(id)
+  {
+    console.log(id);
+    axios.post('http://localhost:3030/DeleteWashTime', {
+      washId: id
+    })
+    .then(result => {
+      if (result.data.result === false)
+      {
+        console.log("Något gick fel");
+      }
+      else 
+      {
+        this.ShowWashTimes();
+        if (this.posts.length === 1)
+        {
+          this.app.getRootNav().setRoot(TabsPage);
+        }
+        else 
+        {
+          
+        }
+        
+      }
+    })
+    .catch(function (error) {
+      console.log(error);
+      alert("Kunde inte kontakta servern");
+    });
   }
 
   handleGetWashTimes() {

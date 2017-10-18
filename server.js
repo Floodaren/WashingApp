@@ -84,9 +84,9 @@ app.post('/ChangeEmail', function(req, res) {
 });
 
 app.post('/GetWashTimesForSpecificUser', function(req, res) {
-  var user = {userId: req.body.userId,};
+  var user = {userId: req.body.userId};
   
-  connection.query('SELECT Starttime,Endtime,Description FROM WashTime WHERE UserId = ' + "'" + user.userId +  "'", 
+  connection.query('SELECT Id,Starttime,Endtime,Description FROM WashTime WHERE UserId = ' + "'" + user.userId +  "'", 
   function(error, result){
     if (result == 0)
     {
@@ -95,6 +95,22 @@ app.post('/GetWashTimesForSpecificUser', function(req, res) {
     else
     {
       res.send({result: result});
+    }
+  }); 
+});
+
+app.post('/DeleteWashTime', function(req, res) {
+  var user = {washId: req.body.washId};
+  
+  connection.query('DELETE FROM WashTime WHERE Id = ' + user.washId,
+  function(error, result){
+    if (result == 0)
+    {
+      res.send({result: false});
+    }
+    else
+    {
+      res.send({result: true});
     }
   }); 
 });

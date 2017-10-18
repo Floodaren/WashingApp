@@ -5,16 +5,27 @@
 </ion-header>
 
 <ion-content>
-  <h1 class="welcomeScreen">Välkommen</h1>
-  <p class="welcomeScreen">Detta är dina bokade tvättider</p>
-  <hr>
-  <ng-container>
-      <ol id="washList" *ngFor="let item of posts">
-          <li class="washInfo">Starttid: {{item.Starttime | date: 'yyyy-MM-dd HH:mm'}}</li>
-          <li class="washInfo">Sluttid: {{item.Endtime | date: 'yyyy-MM-dd HH:mm'}}</li>
-          <li class="washInfo">Beskrivning: {{item.Description}}</li>
-          <hr id="newTimeLine">
-      </ol>
-  </ng-container>
+    <h1 class="welcomeScreen">Välkommen</h1>
+    <p class="welcomeScreen">Detta är dina bokade tvättider</p>
+    <hr id="newTimeLine">
+    <ion-list *ngFor="let item of posts" id="washList"> 
+        <ion-item-sliding>
+            
+            <ion-item>
+            Starttid: {{item.Starttime | date: 'yyyy-MM-dd HH:mm'}}
+            <br>
+            Sluttid: {{item.Endtime | date: 'yyyy-MM-dd HH:mm'}}
+            <br>
+            Beskrivning: {{item.Description}}
+            <br>
+            </ion-item>
+          
+            <ion-item-options>
+                <button ion-button color="danger"  (click)="deleteWashTime(item.Id)">Radera</button>
+            </ion-item-options>
+            
+        </ion-item-sliding>
+        <hr id="newTimeLine">
+    </ion-list>
   <button ion-button round (click)="this.getPosts()" id="UpdateButton">Uppdatera</button>
 </ion-content>

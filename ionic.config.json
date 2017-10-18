@@ -1,6 +1,6 @@
 {
   "name": "slutprojekt",
-  "app_id": "",
+  "app_id": "900af2a2",
   "type": "ionic-angular",
   "integrations": {
     "cordova": {}
