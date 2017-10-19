@@ -2,6 +2,7 @@ import { Component } from '@angular/core';
 import {LoadingController,NavController, ModalController, AlertController } from 'ionic-angular';
 import * as moment from 'moment';
 import axios from 'axios';
+import { Storage } from '@ionic/storage';
 
 @Component({
   selector: 'page-about',
@@ -12,14 +13,18 @@ export class AboutPage {
   eventLoad = [];
   viewTitle: string;
   selectedDay = new Date();
+  userId:any  
  
   calendar = {
     mode: 'month',
     currentDate: new Date()
   };
   
-  constructor(public navCtrl: NavController, private modalCtrl: ModalController, private alertCtrl: AlertController, public loading: LoadingController) 
+  constructor(public navCtrl: NavController, private modalCtrl: ModalController, private alertCtrl: AlertController, public loading: LoadingController, public storage: Storage) 
   {
+    this.storage.get('LoggedInId').then((val) => {
+      this.userId = val;
+      });
   }
   
   
@@ -32,8 +37,11 @@ export class AboutPage {
         let eventData = data;
  
         eventData.startTime = new Date(data.startTime);
-        eventData.endTime = new Date(data.endTime);
- 
+        var lockedTime = moment(eventData.startTime).add(3, 'h').toDate();
+        eventData.endTime = lockedTime;
+        this.createWashTime(this.userId,eventData.startTime,eventData.endTime,eventData.description);
+
+
         let events = this.eventSource;
         events.push(eventData);
         this.eventSource = [];
@@ -119,5 +127,29 @@ export class AboutPage {
 
   async ionViewCanEnter() {
     await this.getWashTimes();
+  }
+
+  createWashTime(userId, startTime, endTime, description)
+  {
+    axios.post('http://localhost:3030/CreateWashTime', {
+      userId: userId,
+      startTime: startTime,
+      endTime: endTime,
+      description: description
+    })
+    .then(result => {
+      if (result.data.result === false)
+      {
+        console.log("inga poster");
+      }
+      else 
+      {
+        console.log("lyckades");
+      }
+    })
+    .catch(function (error) {
+      console.log(error);
+      alert("Kunde inte kontakta servern");
+    });
   }
 }

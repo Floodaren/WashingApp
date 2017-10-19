@@ -122,3 +122,19 @@ app.post('/DeleteWashTime', function(req, res) {
     }
   }); 
 });
+
+app.post('/CreateWashTime', function(req, res) {
+  var user = {userId: req.body.userId, startTime: req.body.startTime, endTime: req.body.endTime, description: req.body.description};
+  connection.query('INSERT INTO WashTime (UserId,Starttime,Endtime,Description) VALUES (' + user.userId + ',"' + user.startTime + '","' + user.endTime + '","' + user.description + '")' ,
+  function(error, result){
+    if (result == 0)
+    {
+      res.send({result: false});
+    }
+    else
+    {
+      res.send({result: true});
+    }
+  }); 
+});
+

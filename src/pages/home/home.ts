@@ -56,7 +56,6 @@ export class HomePage {
   }
 
   handleGetWashTimes() {
-    console.log(this.id);
     axios.post('http://localhost:3030/GetWashTimesForSpecificUser', {
       userId: this.id
     })
@@ -74,6 +73,11 @@ export class HomePage {
       console.log(error);
       alert("Kunde inte kontakta servern");
     });
+  }
+
+  ionViewWillEnter()
+  {
+    this.ShowWashTimes();
   }
 
   doRefresh(refresher) {
