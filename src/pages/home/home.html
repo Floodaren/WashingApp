@@ -1,5 +1,5 @@
 <ion-header>
-  <ion-navbar>
+  <ion-navbar color="primary">
       <ion-title id="HomeTitle">Hem</ion-title>
   </ion-navbar>
 </ion-header>
@@ -7,16 +7,25 @@
 <ion-content>
     <h1 class="welcomeScreen">Välkommen</h1>
     <p class="welcomeScreen">Detta är dina bokade tvättider</p>
+    <p class="swipeInfo">(Dra nedåt för att uppdatera)</p>
     <hr id="newTimeLine">
+    <ion-refresher (ionRefresh)="doRefresh($event)">
+        <ion-refresher-content
+        pullingIcon="arrow-dropdown"
+        pullingText="Dra ned för att uppdatera"
+        refreshingSpinner="circles"
+        refreshingText="Uppdaterar...">
+        </ion-refresher-content>
+    </ion-refresher>
     <ion-list *ngFor="let item of posts" id="washList"> 
         <ion-item-sliding>
             
             <ion-item>
-            Starttid: {{item.Starttime | date: 'yyyy-MM-dd HH:mm'}}
+            <p>Starttid:</p> {{item.Starttime | date: 'yyyy-MM-dd | HH:mm'}}
             <br>
-            Sluttid: {{item.Endtime | date: 'yyyy-MM-dd HH:mm'}}
+            <p>Sluttid:</p>{{item.Endtime | date: 'yyyy-MM-dd | HH:mm'}}
             <br>
-            Beskrivning: {{item.Description}}
+            <p>Beskrivning:</p>{{item.Description}}
             <br>
             </ion-item>
           
@@ -27,5 +36,4 @@
         </ion-item-sliding>
         <hr id="newTimeLine">
     </ion-list>
-  <button ion-button round (click)="this.getPosts()" id="UpdateButton">Uppdatera</button>
 </ion-content>

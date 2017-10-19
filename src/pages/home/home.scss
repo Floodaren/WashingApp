@@ -17,6 +17,7 @@ page-home {
     .welcomeScreen
     {
         text-align: center;
+        margin-bottom: 0;
     }
 
     #newTimeLine
@@ -35,6 +36,13 @@ page-home {
     #test 
     {
         margin-bottom: 0;   
+    }
+
+    .swipeInfo
+    {
+
+        font-size: 10%;
+        text-align: center;
     }
 }
 

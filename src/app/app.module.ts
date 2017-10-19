@@ -10,9 +10,14 @@ import { HomePage } from '../pages/home/home';
 import { TabsPage } from '../pages/tabs/tabs';
 import { LoginPage} from '../pages/login/login';
 import { SignoutPage } from '../pages/signout/signout';
+import { EventModalPage } from '../pages/event-modal/event-modal';
+
+
+import { NgCalendarModule  } from 'ionic2-calendar';
 
 import { StatusBar } from '@ionic-native/status-bar';
 import { SplashScreen } from '@ionic-native/splash-screen';
+
 
 @NgModule({
   declarations: [
@@ -22,12 +27,14 @@ import { SplashScreen } from '@ionic-native/splash-screen';
     HomePage,
     TabsPage,
     LoginPage,
-    SignoutPage
+    SignoutPage,
   ],
   imports: [
     BrowserModule,
     IonicModule.forRoot(MyApp),
-    IonicStorageModule.forRoot()
+    IonicStorageModule.forRoot(),
+    NgCalendarModule,
+    
   ],
   bootstrap: [IonicApp],
   entryComponents: [
@@ -37,7 +44,7 @@ import { SplashScreen } from '@ionic-native/splash-screen';
     HomePage,
     TabsPage,
     LoginPage,
-    SignoutPage
+    SignoutPage,
   ],
   providers: [
     StatusBar,

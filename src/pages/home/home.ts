@@ -24,11 +24,6 @@ export class HomePage {
     this.handleGetWashTimes();
   }
 
-  getPosts()
-  {
-    this.handleGetWashTimes();
-  }
-
   deleteWashTime(id)
   {
     console.log(id);
@@ -79,6 +74,16 @@ export class HomePage {
       console.log(error);
       alert("Kunde inte kontakta servern");
     });
+  }
+
+  doRefresh(refresher) {
+    console.log('Begin async operation', refresher);
+    
+    setTimeout(() => {
+      console.log('Async operation has ended');
+      refresher.complete();
+      this.ShowWashTimes();
+    }, 2000);
   }
 
 }

@@ -5,6 +5,7 @@ import { LoginPage } from './login';
 @NgModule({
   declarations: [
     LoginPage,
+    
   ],
   imports: [
     IonicPageModule.forChild(LoginPage),
