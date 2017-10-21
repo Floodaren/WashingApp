@@ -86,6 +86,7 @@ export class HomePage {
     setTimeout(() => {
       console.log('Async operation has ended');
       refresher.complete();
+      this.posts = [];
       this.ShowWashTimes();
     }, 2000);
   }

@@ -129,12 +129,13 @@ export class AboutPage {
     await this.getWashTimes();
   }
 
-  createWashTime(userId, startTime, endTime, description)
+  createWashTime(userId, inputstartTime, inputendTime, description)
   {
+
     axios.post('http://localhost:3030/CreateWashTime', {
       userId: userId,
-      startTime: startTime,
-      endTime: endTime,
+      startTime: inputstartTime,
+      endTime: inputendTime,
       description: description
     })
     .then(result => {
