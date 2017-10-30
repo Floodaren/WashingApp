@@ -10,7 +10,6 @@ import { HomePage } from '../pages/home/home';
 import { TabsPage } from '../pages/tabs/tabs';
 import { LoginPage} from '../pages/login/login';
 import { SignoutPage } from '../pages/signout/signout';
-import { EventModalPage } from '../pages/event-modal/event-modal';
 
 
 import { NgCalendarModule  } from 'ionic2-calendar';

@@ -26,4 +26,5 @@ export class EventModalPage {
     this.viewCtrl.dismiss(this.event);
   }
 
+
 }

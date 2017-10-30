@@ -1,12 +1,12 @@
 var mysql = require('mysql');
 var express = require('express')
 var bodyParser = require('body-parser');
-var moment = require('moment');
-var app = express()
+var app = express();
 
 app.listen(3030, function () {
-  console.log('Express server is online on port 3030!')
-})
+  console.log('Express server is online on port 3030!');
+});
+
 
 var connection = mysql.createConnection({
   host     : 'localhost',
@@ -27,13 +27,6 @@ app.use(function(req, res, next) {
   next();
 });
 
-app.get('/GetUsers', function(req,res){
-  connection.query('SELECT * FROM Users', 
-  function(error,result)
-  {
-    res.send({users: result});
-  });
-});
 
 app.get('/GetWashTimes', function(req,res){
   connection.query('SELECT * FROM WashTime', 
@@ -126,16 +119,31 @@ app.post('/DeleteWashTime', function(req, res) {
 
 app.post('/CreateWashTime', function(req, res) {
   var user = {userId: req.body.userId, startTime: req.body.startTime, endTime: req.body.endTime, description: req.body.description};
-  connection.query('INSERT INTO WashTime (UserId,Starttime,Endtime,Description) VALUES (' + user.userId + ',"' + user.startTime + '","' + user.endTime + '","' + user.description + '")' ,
-  function(error, result){
-    if (result == 0)
+  var washtimeDidMatch = false;
+  connection.query('SELECT * FROM WashTime', 
+  function(error,result)
+  {
+    result.forEach(function(element) {
+      if (user.startTime < element.Endtime && user.endTime >= element.Starttime)
+      {
+        washtimeDidMatch = true;
+        res.send({result: false});
+      }
+    }, this);
+    if(washtimeDidMatch == false)
     {
-      res.send({result: false});
+      connection.query('INSERT INTO WashTime (UserId,Starttime,Endtime,Description) VALUES (' + user.userId + ',"' + user.startTime + '","' + user.endTime + '","' + user.description + '")' ,
+      function(error, result){
+        if (result == 0)
+        {
+          res.send({result: false});
+        }
+        else
+        {
+          res.send({result: true});
+        }
+      }); 
     }
-    else
-    {
-      res.send({result: true});
-    }
-  }); 
+  });
 });
 

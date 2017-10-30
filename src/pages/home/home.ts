@@ -5,21 +5,21 @@ import { App } from 'ionic-angular';
 import { TabsPage } from '../tabs/tabs';
 import axios from 'axios';
 
+
 @Component({
   selector: 'page-home',
   templateUrl: 'home.html'
 })
 export class HomePage {
-  id:any;
+  Userid:any;
   posts:any;
-  constructor(public navCtrl: NavController, public storage: Storage, private app:App ) {
-    this.ShowWashTimes();
+  constructor(public navCtrl: NavController, public storage: Storage, private app:App ) {  
   }
 
   async ShowWashTimes()
   {
    await this.storage.get('LoggedInId').then((val) => {
-      this.id = val;
+      this.Userid = val;
       });
     this.handleGetWashTimes();
   }
@@ -57,7 +57,7 @@ export class HomePage {
 
   handleGetWashTimes() {
     axios.post('http://localhost:3030/GetWashTimesForSpecificUser', {
-      userId: this.id
+      userId: this.Userid
     })
     .then(result => {
       if (result.data.result === false)
@@ -74,21 +74,23 @@ export class HomePage {
       alert("Kunde inte kontakta servern");
     });
   }
-
+  
+  
   ionViewWillEnter()
   {
+    this.posts = [];
     this.ShowWashTimes();
   }
-
+  
+  
   doRefresh(refresher) {
     console.log('Begin async operation', refresher);
     
     setTimeout(() => {
-      console.log('Async operation has ended');
       refresher.complete();
       this.posts = [];
       this.ShowWashTimes();
-    }, 2000);
+    }, 1000);
   }
 
 }

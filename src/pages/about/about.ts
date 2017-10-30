@@ -13,7 +13,11 @@ export class AboutPage {
   eventLoad = [];
   viewTitle: string;
   selectedDay = new Date();
-  userId:any  
+  userId:any;
+  monthtext:any;
+  washTimeDidExist: boolean = false;
+  
+  
  
   calendar = {
     mode: 'month',
@@ -32,32 +36,35 @@ export class AboutPage {
     
     let modal = this.modalCtrl.create('EventModalPage', {selectedDay: this.selectedDay});
     modal.present();
-    modal.onDidDismiss(data => {
+    modal.onDidDismiss(async data => {
       if (data) {
         let eventData = data;
  
         eventData.startTime = new Date(data.startTime);
         var lockedTime = moment(eventData.startTime).add(3, 'h').toDate();
         eventData.endTime = lockedTime;
-        this.createWashTime(this.userId,eventData.startTime,eventData.endTime,eventData.description);
-
-
-        let events = this.eventSource;
-        events.push(eventData);
-        this.eventSource = [];
-        setTimeout(() => {
-          this.eventSource = events;
-        });
+        await this.createWashTime(this.userId,eventData.startTime,eventData.endTime,eventData.description);
+        
+        if (this.washTimeDidExist === false)
+        {
+          let events = this.eventSource;
+          events.push(eventData);
+          this.eventSource = [];
+          setTimeout(() => {
+            this.eventSource = events;
+          });
+        }      
       }
-    });
+    }); 
   }
 
   FillWashTimes() 
   {
     let events = this.eventSource;
+    console.log(this.eventLoad);
     for (var i = 0 ; i < this.eventLoad.length ; i++)
     {     
-      let eventData2 = { startTime: this.eventLoad[i].Starttime, endTime: this.eventLoad[i].Endtime, allDay: false , title: "Tvättid"};   
+      let eventData2 = { startTime: this.eventLoad[i].Starttime, endTime: this.eventLoad[i].Endtime, allDay: false , title: "Tvättid", userId: this.eventLoad[i].UserId};   
       eventData2.startTime = new Date(this.eventLoad[i].Starttime);
       eventData2.endTime = new Date(this.eventLoad[i].Endtime);
       events.push(eventData2);
@@ -70,15 +77,25 @@ export class AboutPage {
  
   onViewTitleChanged(title) {
     this.viewTitle = title;
+    this.monthtext = title;
   }
  
   onEventSelected(event) {
     let start = moment(event.startTime).format('LLLL');
     let end = moment(event.endTime).format('LLLL');
+    let namn = "";
+    if(event.userId == 1)
+    {
+      namn = "Nicholas Flod";
+    }
+    else 
+    {
+      namn = "Erika Orosz";
+    }
     
     let alert = this.alertCtrl.create({
       title: '' + event.title,
-      subTitle: 'From: ' + start + '<br>To: ' + end,
+      subTitle: 'Från: ' + start + '<br>Till: ' + end + '<br> Bokad av: ' + namn,
       buttons: ['OK']
     })
     alert.present();
@@ -117,7 +134,7 @@ export class AboutPage {
       console.log('Async operation has ended');
       this.getWashTimes();
       refresher.complete();      
-    }, 2000);
+    }, 1000);
   }
 
   ionViewWillEnter()
@@ -129,10 +146,10 @@ export class AboutPage {
     await this.getWashTimes();
   }
 
-  createWashTime(userId, inputstartTime, inputendTime, description)
+  async createWashTime(userId, inputstartTime, inputendTime, description)
   {
 
-    axios.post('http://localhost:3030/CreateWashTime', {
+    await axios.post('http://localhost:3030/CreateWashTime', {
       userId: userId,
       startTime: inputstartTime,
       endTime: inputendTime,
@@ -141,11 +158,13 @@ export class AboutPage {
     .then(result => {
       if (result.data.result === false)
       {
-        console.log("inga poster");
+        this.showAlert();
+        this.washTimeDidExist = true;
       }
       else 
       {
-        console.log("lyckades");
+        this.washTimeDidExist = false;
+        
       }
     })
     .catch(function (error) {
@@ -153,4 +172,15 @@ export class AboutPage {
       alert("Kunde inte kontakta servern");
     });
   }
+
+  showAlert() 
+  {
+    let alert = this.alertCtrl.create({
+      title: 'Tvättiden är upptagen',
+      subTitle: 'Försök med en annan tid istället',
+      buttons: ['OK']
+    });
+    alert.present();
+  }
+
 }
