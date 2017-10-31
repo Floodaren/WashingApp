@@ -15,7 +15,7 @@ export class ContactPage {
       this.id = val;
       });
   }
-
+//#region Change mail and password prompts
   changeEmail()
   {
     this.showPromptEmail("Ändra Mail","Vilken ny e-postadress vill du ändra till?", "email", "Ny email");
@@ -84,18 +84,10 @@ export class ContactPage {
     });
     prompt.present();
   }
+//#endregion
 
-  showAlert(inputTitle, inputSubTitle) 
-  {
-    let alert = this.alertCtrl.create({
-      title: inputTitle,
-      subTitle: inputSubTitle,
-      buttons: ['OK']
-    });
-    alert.present();
-  }
 
-  
+//#region Change mail and password functions
   handleChangePassword(ChangeuserId,newPassword) {
     axios.post('http://localhost:3030/ChangePassword', {
       userId: ChangeuserId,
@@ -141,5 +133,16 @@ export class ContactPage {
       alert("Kunde inte kontakta servern");
     });
   }
+
+  showAlert(inputTitle, inputSubTitle) 
+  {
+    let alert = this.alertCtrl.create({
+      title: inputTitle,
+      subTitle: inputSubTitle,
+      buttons: ['OK']
+    });
+    alert.present();
+  }
+//#endregion
 }
 

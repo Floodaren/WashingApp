@@ -120,6 +120,14 @@ app.post('/DeleteWashTime', function(req, res) {
 app.post('/CreateWashTime', function(req, res) {
   var user = {userId: req.body.userId, startTime: req.body.startTime, endTime: req.body.endTime, description: req.body.description};
   var washtimeDidMatch = false;
+  var checkTime = new Date().toISOString();
+  
+  if (user.startTime < checkTime)
+  {
+    washtimeDidMatch = true;
+    res.send({result: false});
+  }
+  
   connection.query('SELECT * FROM WashTime', 
   function(error,result)
   {

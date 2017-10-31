@@ -16,9 +16,9 @@ export class AboutPage {
   userId:any;
   monthtext:any;
   washTimeDidExist: boolean = false;
+
+  monthOrDay: boolean = false;
   
-  
- 
   calendar = {
     mode: 'month',
     currentDate: new Date()
@@ -30,8 +30,10 @@ export class AboutPage {
       this.userId = val;
       });
   }
+
+
   
-  
+//#region Create event/washtime
   addEvent() {
     
     let modal = this.modalCtrl.create('EventModalPage', {selectedDay: this.selectedDay});
@@ -56,94 +58,6 @@ export class AboutPage {
         }      
       }
     }); 
-  }
-
-  FillWashTimes() 
-  {
-    let events = this.eventSource;
-    console.log(this.eventLoad);
-    for (var i = 0 ; i < this.eventLoad.length ; i++)
-    {     
-      let eventData2 = { startTime: this.eventLoad[i].Starttime, endTime: this.eventLoad[i].Endtime, allDay: false , title: "Tvättid", userId: this.eventLoad[i].UserId};   
-      eventData2.startTime = new Date(this.eventLoad[i].Starttime);
-      eventData2.endTime = new Date(this.eventLoad[i].Endtime);
-      events.push(eventData2);
-    }
-    this.eventSource = [];
-    setTimeout(() => {
-      this.eventSource = events;
-    });
-  }
- 
-  onViewTitleChanged(title) {
-    this.viewTitle = title;
-    this.monthtext = title;
-  }
- 
-  onEventSelected(event) {
-    let start = moment(event.startTime).format('LLLL');
-    let end = moment(event.endTime).format('LLLL');
-    let namn = "";
-    if(event.userId == 1)
-    {
-      namn = "Nicholas Flod";
-    }
-    else 
-    {
-      namn = "Erika Orosz";
-    }
-    
-    let alert = this.alertCtrl.create({
-      title: '' + event.title,
-      subTitle: 'Från: ' + start + '<br>Till: ' + end + '<br> Bokad av: ' + namn,
-      buttons: ['OK']
-    })
-    alert.present();
-  }
- 
-  onTimeSelected(ev) {
-    this.selectedDay = ev.selectedTime;
-  }
-
-
-  async getWashTimes() {
-    this.eventSource = [];
-    await axios.get('http://localhost:3030/GetWashTimes', {
-    })
-    .then(result => {
-      if (result.data.userId === 0)
-      {
-        console.log("Inga poster")
-      }
-      else 
-      {
-        this.eventLoad = result.data.washTimes;
-        return this.FillWashTimes();
-      }
-    })
-    .catch(function (error) {
-      console.log(error);
-      alert("Kunde inte kontakta servern");
-    });
-  }
-
-  doRefresh(refresher) {
-    console.log('Begin async operation', refresher);
-    
-    setTimeout(() => {
-      console.log('Async operation has ended');
-      this.getWashTimes();
-      refresher.complete();      
-    }, 1000);
-  }
-
-  ionViewWillEnter()
-  {
-    this.getWashTimes();
-  }
-
-  async ionViewCanEnter() {
-    await this.getWashTimes();
   }
 
   async createWashTime(userId, inputstartTime, inputendTime, description)
@@ -172,15 +86,127 @@ export class AboutPage {
       alert("Kunde inte kontakta servern");
     });
   }
+//#endregion
+ 
+//#region Get wash times and fill the view
+  FillWashTimes() 
+  {
+    let events = this.eventSource;
+    console.log(this.eventLoad);
+    for (var i = 0 ; i < this.eventLoad.length ; i++)
+    {     
+      let eventData2 = { startTime: this.eventLoad[i].Starttime, endTime: this.eventLoad[i].Endtime, allDay: false , title: "Tvättid", userId: this.eventLoad[i].UserId};   
+      eventData2.startTime = new Date(this.eventLoad[i].Starttime);
+      eventData2.endTime = new Date(this.eventLoad[i].Endtime);
+      events.push(eventData2);
+    }
+    this.eventSource = [];
+    setTimeout(() => {
+      this.eventSource = events;
+    });
+  }
 
+  async getWashTimes() {
+    this.eventSource = [];
+    await axios.get('http://localhost:3030/GetWashTimes', {
+    })
+    .then(result => {
+      if (result.data.userId === 0)
+      {
+        console.log("Inga poster")
+      }
+      else 
+      {
+        this.eventLoad = result.data.washTimes;
+        return this.FillWashTimes();
+      }
+    })
+    .catch(function (error) {
+      console.log(error);
+      alert("Kunde inte kontakta servern");
+    });
+  }
+ //#endregion
+ 
+//#region Select events and show month
+ onViewTitleChanged(title) {
+    this.viewTitle = title;
+    this.monthtext = title;
+  }
+
+  onTimeSelected(ev) {
+    this.selectedDay = ev.selectedTime;
+  }
+
+  onEventSelected(event) {
+    let start = moment(event.startTime).format('LLLL');
+    let end = moment(event.endTime).format('LLLL');
+    let namn = "";
+    console.log(event.userId);
+    if(event.userId == 1)
+    {
+      namn = "Nicholas Flod";
+    }
+    else if (event.userId == 2)
+    {
+      namn = "Erika Orosz";
+    }
+    else 
+    {
+      namn = "Uppdatera för att se vem som bokat tiden";
+    }
+    
+    let alert = this.alertCtrl.create({
+      title: '' + event.title,
+      subTitle: 'Från: ' + start + '<br>Till: ' + end + '<br> Bokad av: ' + namn,
+      buttons: ['OK']
+    })
+    alert.present();
+  }
+//#endregion
+
+//#region Update view and enter view
   showAlert() 
   {
     let alert = this.alertCtrl.create({
-      title: 'Tvättiden är upptagen',
-      subTitle: 'Försök med en annan tid istället',
+      title: 'Felaktig Tvättid!',
+      subTitle: 'Antingen är tvättiden upptagen eller så har du valt en tid som är tidigare än den nuvarande',
       buttons: ['OK']
     });
     alert.present();
   }
 
+  switchView()
+  {
+    if (this.monthOrDay == false)
+    {
+      this.calendar.mode = 'week';
+      this.monthOrDay = true;
+    }
+    else if (this.monthOrDay == true)
+    {
+      this.calendar.mode = 'month';
+      this.monthOrDay = false;
+    }
+  }
+
+  doRefresh(refresher) {
+    console.log('Begin async operation', refresher);
+    
+    setTimeout(() => {
+      console.log('Async operation has ended');
+      this.getWashTimes();
+      refresher.complete();      
+    }, 1000);
+  }
+
+  ionViewWillEnter()
+  {
+    this.getWashTimes();
+  }
+
+  async ionViewCanEnter() {
+    await this.getWashTimes();
+  }
+//#endregion
 }
