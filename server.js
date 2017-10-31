@@ -7,7 +7,7 @@ app.listen(3030, function () {
   console.log('Express server is online on port 3030!');
 });
 
-
+//#region Connection to DB and App-use
 var connection = mysql.createConnection({
   host     : 'localhost',
   user     : 'root',
@@ -26,8 +26,9 @@ app.use(function(req, res, next) {
   res.header("Access-Control-Allow-Headers", "Origin, X-Requested-With, Content-Type, Accept");
   next();
 });
+//#endregion
 
-
+//#region Get methods
 app.get('/GetWashTimes', function(req,res){
   connection.query('SELECT * FROM WashTime', 
   function(error,result)
@@ -36,6 +37,24 @@ app.get('/GetWashTimes', function(req,res){
   });
 });
 
+app.post('/GetWashTimesForSpecificUser', function(req, res) {
+  var user = {userId: req.body.userId};
+  
+  connection.query('SELECT Id,Starttime,Endtime,Description FROM WashTime WHERE UserId = ' + "'" + user.userId +  "'", 
+  function(error, result){
+    if (result == 0)
+    {
+      res.send({result: false});
+    }
+    else
+    {
+      res.send({result: result});
+    }
+  }); 
+});
+//#endregion
+
+//#region Login
 app.post('/LogInUser', function(req, res) {
   var user = {username: req.body.username, password: req.body.password};
   
@@ -51,7 +70,9 @@ app.post('/LogInUser', function(req, res) {
     }
   }); 
 });
+//#endregion
 
+//#region Update methods
 app.post('/ChangePassword', function(req, res) {
   var user = {userId: req.body.userId, password: req.body.password};
   
@@ -84,23 +105,9 @@ app.post('/ChangeEmail', function(req, res) {
     }
   }); 
 });
+//#endregion
 
-app.post('/GetWashTimesForSpecificUser', function(req, res) {
-  var user = {userId: req.body.userId};
-  
-  connection.query('SELECT Id,Starttime,Endtime,Description FROM WashTime WHERE UserId = ' + "'" + user.userId +  "'", 
-  function(error, result){
-    if (result == 0)
-    {
-      res.send({result: false});
-    }
-    else
-    {
-      res.send({result: result});
-    }
-  }); 
-});
-
+//#region Delete methods
 app.post('/DeleteWashTime', function(req, res) {
   var user = {washId: req.body.washId};
   
@@ -116,7 +123,9 @@ app.post('/DeleteWashTime', function(req, res) {
     }
   }); 
 });
+//#endregion
 
+//#region Create methods
 app.post('/CreateWashTime', function(req, res) {
   var user = {userId: req.body.userId, startTime: req.body.startTime, endTime: req.body.endTime, description: req.body.description};
   var washtimeDidMatch = false;
@@ -154,4 +163,5 @@ app.post('/CreateWashTime', function(req, res) {
     }
   });
 });
+//#endregion
 
